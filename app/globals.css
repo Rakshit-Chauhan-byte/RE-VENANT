@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #080c0a;
+  --foreground: #e2e8f0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom dark scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0e0c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e2923;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff88;
+}
+
+/* Phosphor and terminal text utilities */
+.font-terminal {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.text-phosphor {
+  color: #00ff88;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+
+.border-phosphor-glow {
+  border-color: rgba(0, 255, 136, 0.3);
+  box-shadow: 0 0 15px -3px rgba(0, 255, 136, 0.15);
+}
+
+.border-spectral-glow {
+  border-color: rgba(6, 182, 212, 0.3);
+  box-shadow: 0 0 15px -3px rgba(6, 182, 212, 0.15);
+}
+
+/* Scanline overlay for cyber-archaeology aesthetic */
+.scanlines {
+  background: linear-gradient(
+    rgba(18, 26, 22, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.01),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.01)
+  );
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+}
