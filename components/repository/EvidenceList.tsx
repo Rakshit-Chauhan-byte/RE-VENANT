@@ -85,11 +85,10 @@ export function EvidenceList({ evidence }: EvidenceListProps) {
               <button
                 key={c.id}
                 onClick={() => setFilterCategory(c.id)}
-                className={`text-[11px] font-mono px-2.5 py-1.5 rounded-md whitespace-nowrap transition-colors ${
-                  filterCategory === c.id
+                className={`text-[11px] font-mono px-2.5 py-1.5 rounded-md whitespace-nowrap transition-colors ${filterCategory === c.id
                     ? 'bg-ghost-dim/70 text-ghost-phosphor border border-ghost-emerald/40'
                     : 'bg-void-950 text-zinc-400 hover:text-zinc-200 border border-void-800'
-                }`}
+                  }`}
               >
                 {c.label}
               </button>
@@ -107,13 +106,12 @@ export function EvidenceList({ evidence }: EvidenceListProps) {
           return (
             <div
               key={item.id}
-              className={`rounded-lg border p-4 transition-all bg-void-900/70 font-mono text-xs ${
-                isAlert
+              className={`rounded-lg border p-4 transition-all bg-void-900/70 font-mono text-xs ${isAlert
                   ? 'border-red-900/50 hover:border-red-700/60'
                   : isWarning
-                  ? 'border-amber-900/40 hover:border-amber-700/50'
-                  : 'border-void-800 hover:border-void-700'
-              }`}
+                    ? 'border-amber-900/40 hover:border-amber-700/50'
+                    : 'border-void-800 hover:border-void-700'
+                }`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2 flex-wrap">

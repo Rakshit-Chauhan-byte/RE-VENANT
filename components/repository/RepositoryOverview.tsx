@@ -29,8 +29,8 @@ export function RepositoryOverview({ analysis, onNavigateTab }: RepositoryOvervi
     statistics.abandonmentAssessment === 'High'
       ? 'bg-red-950/60 text-red-400 border-red-800/50'
       : statistics.abandonmentAssessment === 'Moderate'
-      ? 'bg-amber-950/60 text-amber-300 border-amber-800/50'
-      : 'bg-emerald-950/60 text-emerald-400 border-emerald-800/50';
+        ? 'bg-amber-950/60 text-amber-300 border-amber-800/50'
+        : 'bg-emerald-950/60 text-emerald-400 border-emerald-800/50';
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">

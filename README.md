@@ -166,3 +166,4 @@ npm run build
 
 Built with ❤️ for **Hacktoberfest Week 4 — Ghost in the Machine**.
 Licensed under the [MIT License](LICENSE).
+
