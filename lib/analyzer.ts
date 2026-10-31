@@ -123,3 +123,4 @@ export async function analyzeRepository(repoPath: string): Promise<RepositoryAna
     analyzedAt: new Date().toISOString(),
   };
 }
+

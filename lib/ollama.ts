@@ -126,6 +126,7 @@ export async function sendOllamaChat(
     options: {
       temperature,
     },
+    keep_alive: '10m', // Keep model loaded in memory for faster follow-up queries
   };
 
   let response: Response;

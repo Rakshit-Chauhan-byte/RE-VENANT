@@ -29,10 +29,10 @@ export function EvidenceList({ evidence }: EvidenceListProps) {
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      const matchId = item.id.toLowerCase().includes(q);
-      const matchPath = item.filePath?.toLowerCase().includes(q);
-      const matchExpl = item.explanation.toLowerCase().includes(q);
-      const matchSnippet = item.snippet?.toLowerCase().includes(q);
+      const matchId = (item.id || '').toLowerCase().includes(q);
+      const matchPath = (item.filePath || '').toLowerCase().includes(q);
+      const matchExpl = (item.explanation || '').toLowerCase().includes(q);
+      const matchSnippet = (item.snippet || '').toLowerCase().includes(q);
       return matchId || matchPath || matchExpl || matchSnippet;
     }
     return true;
@@ -186,3 +186,4 @@ export function EvidenceList({ evidence }: EvidenceListProps) {
     </div>
   );
 }
+

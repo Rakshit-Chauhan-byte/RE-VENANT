@@ -53,6 +53,9 @@ const SECRET_FILE_PATTERNS = [
   /^\.env/i,
   /\.pem$/i,
   /\.key$/i,
+  /\.keystore$/i,
+  /\.jks$/i,
+  /\.kdbx$/i,
   /id_rsa/i,
   /id_ecdsa/i,
   /id_ed25519/i,
@@ -61,6 +64,9 @@ const SECRET_FILE_PATTERNS = [
   /\.htpasswd/i,
   /\.pfx$/i,
   /\.p12$/i,
+  /^\.npmrc$/i,
+  /^\.pypirc$/i,
+  /^\.netrc$/i,
 ];
 
 // Regex to catch unfinished work comments
@@ -143,7 +149,20 @@ export async function scanRepository(
     for (const entry of entries) {
       if (scannedFileCount >= maxFiles) break;
 
+      // Security: never traverse symbolic links to prevent circular references and path traversal outside repo root
+      if (entry.isSymbolicLink()) {
+        continue;
+      }
+
       const fullPath = path.join(currentDir, entry.name);
+
+      // Security: ensure fullPath is strictly contained within repoPath
+      const resolvedPath = path.resolve(fullPath);
+      const resolvedRoot = path.resolve(repoPath);
+      if (!resolvedPath.startsWith(resolvedRoot)) {
+        continue;
+      }
+
       const relativePath = path.relative(repoPath, fullPath).replace(/\\/g, '/');
 
       if (entry.isDirectory()) {
@@ -260,6 +279,10 @@ export async function scanRepository(
           const lines = content.split(/\r?\n/);
           for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
+            // Performance: skip excessively long lines (e.g. bundled or minified code) to prevent regex backtracking
+            if (line.length > 2000) {
+              continue;
+            }
             const match = line.match(TODO_REGEX);
             if (match) {
               const markerType = match[1].toUpperCase().replace(/\s+/g, '_') as
@@ -450,3 +473,4 @@ export async function scanRepository(
     evidence,
   };
 }
+

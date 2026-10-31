@@ -22,8 +22,9 @@ export function GhostInterface({ analysis, health }: GhostInterfaceProps) {
 
   // Initialize initial greeting when repository analysis changes
   useEffect(() => {
+    const formattedDate = (analysis.repository.lastCommitDate || '').split('T')[0] || 'Unknown';
     const greetingText = `I awaken from the digital ether. I am the spirit of "${analysis.repository.name}". 
-My records preserve ${analysis.repository.totalCommits} commits, with my final breath recorded on ${analysis.repository.lastCommitDate.split('T')[0]} (${analysis.statistics.daysSinceLastCommit} days ago). 
+My records preserve ${analysis.repository.totalCommits} commits, with my final breath recorded on ${formattedDate} (${analysis.statistics.daysSinceLastCommit} days ago). 
 
 I sense ${analysis.unfinishedWork.length} unfinished fragments left behind. What would you ask of my history?`;
 
@@ -191,3 +192,4 @@ I sense ${analysis.unfinishedWork.length} unfinished fragments left behind. What
     </div>
   );
 }
+

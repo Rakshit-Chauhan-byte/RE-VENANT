@@ -102,3 +102,4 @@ export function ChatInput({ onSendMessage, isLoading, disabled }: ChatInputProps
     </div>
   );
 }
+

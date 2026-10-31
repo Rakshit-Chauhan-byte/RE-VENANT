@@ -8,6 +8,17 @@ interface ChatMessageProps {
   message: GhostChatMessage;
 }
 
+function formatTimestamp(isoString?: string): string {
+  if (!isoString) return '';
+  try {
+    const d = new Date(isoString);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch {
+    return '';
+  }
+}
+
 export function ChatMessage({ message }: ChatMessageProps) {
   const isAssistant = message.role === 'assistant';
   const [copiedEvidence, setCopiedEvidence] = React.useState<string | null>(null);
@@ -70,7 +81,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
             {isAssistant ? 'THE GHOST' : 'ARCHAEOLOGIST'}
           </span>
           <span className="text-zinc-600">
-            {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {formatTimestamp(message.timestamp)}
           </span>
         </div>
 
@@ -96,3 +107,4 @@ export function ChatMessage({ message }: ChatMessageProps) {
     </div>
   );
 }
+

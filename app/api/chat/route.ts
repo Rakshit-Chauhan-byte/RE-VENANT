@@ -45,11 +45,13 @@ export async function POST(req: NextRequest) {
     if (Array.isArray(history)) {
       const recent = history.slice(-10);
       for (const msg of recent) {
-        if (msg.role === 'user' || msg.role === 'assistant') {
-          formattedHistory.push({
-            role: msg.role,
-            content: msg.content,
-          });
+        if (msg && typeof msg === 'object' && typeof msg.content === 'string') {
+          if (msg.role === 'user' || msg.role === 'assistant') {
+            formattedHistory.push({
+              role: msg.role,
+              content: msg.content.slice(0, 4000),
+            });
+          }
         }
       }
     }
@@ -85,3 +87,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

@@ -146,3 +146,4 @@ export interface SystemHealth {
   availableModels: string[];
   error?: string;
 }
+

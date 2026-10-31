@@ -120,3 +120,4 @@ export function validateChatPayload(body: unknown): {
 
   return { valid: true, message: message.trim() };
 }
+

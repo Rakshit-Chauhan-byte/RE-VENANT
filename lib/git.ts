@@ -128,9 +128,9 @@ export async function getGitRepositoryInfo(repoPath: string): Promise<{
       ]);
       const parts = lastLog.trim().split('\x1f');
       if (parts.length >= 4) {
-        lastCommitAuthor = parts[1];
-        lastCommitDate = parts[2];
-        lastCommitMessage = parts[3];
+        lastCommitAuthor = (parts[1] || '').trim();
+        lastCommitDate = (parts[2] || '').trim();
+        lastCommitMessage = (parts[3] || '').trim();
       }
     } catch (err) {
       console.warn('Failed to retrieve last commit:', err);
@@ -210,10 +210,10 @@ export async function getGitRepositoryInfo(repoPath: string): Promise<{
         const parts = entry.split('\x1f');
         if (parts.length >= 4) {
           recentCommits.push({
-            hash: parts[0],
-            date: parts[1],
-            author: parts[2],
-            message: parts[3],
+            hash: (parts[0] || '').trim(),
+            date: (parts[1] || '').trim(),
+            author: (parts[2] || '').trim(),
+            message: (parts[3] || '').trim(),
           });
         }
       }
@@ -254,3 +254,4 @@ export async function getGitRepositoryInfo(repoPath: string): Promise<{
 
   return { metadata, activity };
 }
+

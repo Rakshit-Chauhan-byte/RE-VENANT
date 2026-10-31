@@ -81,7 +81,7 @@ export function RepositoryOverview({ analysis, onNavigateTab }: RepositoryOvervi
               {statistics.daysSinceLastCommit} <span className="text-xs font-normal text-zinc-500">days</span>
             </div>
             <div className="text-[10px] text-zinc-500 font-mono mt-0.5 truncate">
-              Last commit: {repository.lastCommitDate.split('T')[0] || 'Unknown'}
+              Last commit: {(repository.lastCommitDate || '').split('T')[0] || 'Unknown'}
             </div>
           </div>
 
@@ -292,7 +292,7 @@ export function RepositoryOverview({ analysis, onNavigateTab }: RepositoryOvervi
               </div>
               <div className="text-zinc-500 flex items-center gap-3 shrink-0 text-[11px]">
                 <span>{commit.author}</span>
-                <span>{commit.date.split('T')[0]}</span>
+                <span>{(commit.date || '').split('T')[0] || 'Unknown'}</span>
               </div>
             </div>
           ))}
@@ -307,3 +307,4 @@ export function RepositoryOverview({ analysis, onNavigateTab }: RepositoryOvervi
     </div>
   );
 }
+

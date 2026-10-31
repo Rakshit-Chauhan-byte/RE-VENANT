@@ -5,14 +5,32 @@ import { DigitalAutopsyReport, RepositoryAnalysis } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-function cleanJsonString(str: string): string {
-  let cleaned = str.trim();
-  // Strip ```json ... ``` codeblocks if present
-  if (cleaned.startsWith('```')) {
-    cleaned = cleaned.replace(/^```(?:json)?\s*/i, '');
-    cleaned = cleaned.replace(/\s*```$/, '');
+function extractAndParseJson<T>(raw: string): T | null {
+  if (!raw) return null;
+  const str = raw.trim();
+
+  // 1. Direct JSON parse
+  try {
+    return JSON.parse(str) as T;
+  } catch {}
+
+  // 2. Match code fence ```json ... ```
+  const codeBlockMatch = str.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  if (codeBlockMatch && codeBlockMatch[1]) {
+    try {
+      return JSON.parse(codeBlockMatch[1].trim()) as T;
+    } catch {}
   }
-  return cleaned.trim();
+
+  // 3. Match JSON object boundaries { ... }
+  const curlyMatch = str.match(/\{[\s\S]*\}/);
+  if (curlyMatch) {
+    try {
+      return JSON.parse(curlyMatch[0]) as T;
+    } catch {}
+  }
+
+  return null;
 }
 
 export async function POST(req: NextRequest) {
@@ -44,21 +62,7 @@ export async function POST(req: NextRequest) {
       { role: 'user', content: userPrompt },
     ]);
 
-    let parsed: Partial<DigitalAutopsyReport> = {};
-    try {
-      const cleaned = cleanJsonString(rawResponse);
-      parsed = JSON.parse(cleaned);
-    } catch {
-      // Robust fallback extraction if model returned slight formatting defect
-      const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        try {
-          parsed = JSON.parse(jsonMatch[0]);
-        } catch {
-          // Fallback to text synthesis
-        }
-      }
-    }
+    const parsed = extractAndParseJson<Partial<DigitalAutopsyReport>>(rawResponse) || {};
 
     // Ensure all required fields exist
     const report: DigitalAutopsyReport = {
@@ -136,3 +140,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

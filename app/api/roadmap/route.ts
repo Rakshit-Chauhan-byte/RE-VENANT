@@ -5,13 +5,32 @@ import { RepositoryAnalysis, RoadmapTask } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-function cleanJsonString(str: string): string {
-  let cleaned = str.trim();
-  if (cleaned.startsWith('```')) {
-    cleaned = cleaned.replace(/^```(?:json)?\s*/i, '');
-    cleaned = cleaned.replace(/\s*```$/, '');
+function extractAndParseJsonArray<T>(raw: string): T[] | null {
+  if (!raw) return null;
+  const str = raw.trim();
+
+  try {
+    const val = JSON.parse(str);
+    if (Array.isArray(val)) return val as T[];
+  } catch {}
+
+  const codeBlockMatch = str.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  if (codeBlockMatch && codeBlockMatch[1]) {
+    try {
+      const val = JSON.parse(codeBlockMatch[1].trim());
+      if (Array.isArray(val)) return val as T[];
+    } catch {}
   }
-  return cleaned.trim();
+
+  const arrayMatch = str.match(/\[[\s\S]*\]/);
+  if (arrayMatch) {
+    try {
+      const val = JSON.parse(arrayMatch[0]);
+      if (Array.isArray(val)) return val as T[];
+    } catch {}
+  }
+
+  return null;
 }
 
 function generateDeterministicFallbackRoadmap(analysis: RepositoryAnalysis): RoadmapTask[] {
@@ -139,10 +158,9 @@ export async function POST(req: NextRequest) {
         { role: 'user', content: userPrompt },
       ]);
 
-      const cleaned = cleanJsonString(rawResponse);
-      const parsed = JSON.parse(cleaned);
+      const parsed = extractAndParseJsonArray<RoadmapTask>(rawResponse);
 
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (parsed && Array.isArray(parsed) && parsed.length > 0) {
         tasks = parsed.map((item, idx) => ({
           id: item.id || `ROADMAP-${idx + 1}`,
           title: item.title || `Resurrection Task ${idx + 1}`,
@@ -185,3 +203,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
